@@ -1,14 +1,13 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
-// const ytdl = require("ytdl-core");
-const { videoInfo, downloadVideo } = require("./video");
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
-const pagePath = path.join(__dirname, "./frontend/index.html")
+const pagePath = path.join(__dirname, "./frontend/index.html");
 
-const createWindow = () => {
+app.whenReady().then(() => {
   const window = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
+    resizable: false,
     icon: path.join(__dirname, "./frontend/youtube.png"),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -19,8 +18,4 @@ const createWindow = () => {
 
   window.loadFile(pagePath);
   window.setMenuBarVisibility(true);
-}
-
-app.whenReady().then(() => {
-  createWindow();
 });

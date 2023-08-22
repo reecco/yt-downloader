@@ -2,5 +2,161 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
+  border: none;
 }
+
+body {
+  display: flex;
+  flex-direction: row;
+  background-color: #fbfafb;
+  width: 100vw;
+  height: 100vh;
+}
+
+header nav {
+  background-color: #2c2c2e;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 30px;
+}
+
+header nav .menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header nav .menu a {
+  text-decoration: none;
+  color: #fefefe;
+}
+
+header nav .menu a:last-child {
+  margin: 10px 0;
+}
+
+/* Initial index.html */
+
+.container {
+  padding: 20px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.container .search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container .search h1 {
+  /* text-align: center; */
+  font-size: 1.5rem;
+}
+
+.container .search .input {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 500px;
+  /* height: 100px; */
+}
+
+.container .search .input .input-url {
+  height: 50px;
+  width: 600px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border: 1px solid #d7dcde;
+  font-size: 1.1rem;
+  padding-left: 10px;
+  margin-right: 5px;
+}
+
+.container .search .input .input-url:focus {
+  outline: 1px solid #d7dcde;
+}
+
+.container .search .input .btn-search {
+  background-image: url(./search.svg);
+  border: 1px solid #c4c9cb;
+  border-left: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #c4c9cb;
+  width: 90px;
+  height: 50px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  cursor: pointer;
+}
+
+.container .search .input .btn-search:hover {
+  opacity: .8;
+}
+
+/* .container .search .input .loading {
+  background-image: url(./loading.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 90px;
+  height: 50px;
+} */
+
+.container .content .video {
+  margin-top: 20px;
+  display: flex;
+  background-color: transparent;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.container .content .video .box-result .thumbnail {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 300px;
+  height: 225px;
+  border-radius: 10px;
+}
+
+.container .content .video .box-download {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.container .content .video .box-download .infos {
+  display: flex;
+  flex-direction: column;
+}
+
+.container .content .video .box-download .infos .title {
+  font-size: 1.1rem;
+  padding: 10px;
+  height: 21px;
+}
+
+.container .content .video .box-download .infos .duration {
+  margin-top: 30px;
+  padding: 10px;
+}
+
+.container .content .video .box-download .download {
+  padding: 10px;
+}
+
+/* End index.html */
+
+/* Initial about.html */
+
+/* End about.html */

@@ -1,28 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="img-src 'self' trustedImageOrigin;">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
-  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
-  <!-- <meta http-equiv="Content-Security-Policy"
-    content="default-src gap://ready file://* *; style-src 'self' http://* https://* 'unsafe-inline'; script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval'"> -->
-  <!-- <meta http-equiv="Content-Security-Policy"
-    content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;"> -->
   <title>Youtube Downloader</title>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <h1>Youtube Downloader</h1>
-  <p id="info"></p>
-
-  <input type="text" name="url" id="url">
-  <button id="search">Search</button>
-
-  <p id="video-title"></p>
-
-  <img id="image-video" src="" alt="">
+  <header>
+    <nav>
+      <div class="menu">
+        <a href="./index.html">Home</a>
+        <a href="./about.html">About</a>
+      </div>
+      <button id="btn-language">Change language</button>
+    </nav>
+  </header>
+  <main class="container">
+    <div class="search">
+      <h1>Youtube Downloader</h1>
+      <div class="input">
+        <input type="text" name="url" id="url" class="input-url" placeholder="https://www.youtube.com/watch?v=ggG9ySCChYw">
+        <button class="btn-search" id="btn-search"></button>
+        <div id="loading" class="loading"></div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="video" id="video">
+        <div id="result" class="box-result">
+          <div class="thumbnail" id="thumbnail"></div>
+        </div>
+        <div class="box-download" id="download">
+          <div class="infos">
+            <h3 class="title" id="title"></h3>
+            <h5 class="duration" id="duration"></h5>
+          </div>
+          <div class="download">
+            <select name="format" id="format">
+              <option value="mp4">MP4</option>
+              <option value="webm">WEBM</option>
+              <option value="mp3">MP3</option>
+            </select>
+            <button id="btn-download">Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <h4 id="message"></h4>
+      <div>
+        <h4>Download history</h4>
+        <div></div>
+      </div>
+    </footer>
+  </main>
 </body>
 <script src="./renderer.js"></script>
+
 </html>

@@ -1,57 +1,83 @@
-// const url = document.getElementById("url");
+// const information = document.getElementById('info');
+// information.textContent = `This app is using Chrome (v${media.chrome()}), Node.js (v${media.node()}), and Electron (v${media.electron()})`;
 
-// function handleOnChange({ target: { value } }) {
-//   window.API.setUrl(value);
-// }
+let language = "en";
+const btnSearch = document.getElementById("btn-search");
+const btnDownload = document.getElementById("btn-download");
+const btnLanguage = document.getElementById("btn-language");
+const btnReload = document.getElementById("btn-reload");
+const message = document.getElementById("message");
+const video = document.getElementById("video");
 
-// url.addEventListener("change", handleOnChange);
+(() => {
+  btnLanguage.textContent = "English";
+})();
 
-// const url = document.getElementById("url");
-// const submitButton = document.getElementById("search");
-// const valorExibido = document.getElementById('view');
+// Implementar um tradutor de idioma nesse app
+// Implementar uma maneira de decidir se vai baixar um mp3 ou mp4
 
-// function handleOnClick() {
-//   const value = url.value;
-//   // window.API.setUrl(value);
+const isValidUrl = (url) => new RegExp(/http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/).test(url);
 
-//   // Solicitar o valor do processo principal
-//   // ipcRenderer.send('get-value-request');
-
-//   // // Lidar com a resposta do processo principal
-//   // ipcRenderer.on('get-value-reply', (event, valor) => {
-//   //   valorExibido.textContent = `O valor é: ${valor}`;
-//   // });
-// }
-
-// submitButton.addEventListener("click", handleOnClick);
-
-const information = document.getElementById('info')
-information.textContent = `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}), and Electron (v${versions.electron()})`;
-
-const search = document.getElementById("search");
+function changeLanguage() {
+  language = language == "pt-br" ? "en" : "pt-br";
+  btnLanguage.textContent = language == "en" ? "English" : "Português";
+}
 
 async function searchVideo() {
-  const url = document.getElementById("url").value;
-  const imageVideo = document.getElementById("image-video");
+  const url = document.getElementById("url");
+  const divDownload = document.getElementById("download");
+  const thumbnail = document.getElementById("thumbnail");
+  const title = document.getElementById("title");
+  const duration = document.getElementById("duration");
+  message.textContent = "";
+  title.textContent = "";
+  duration.textContent = "";
+  localStorage.setItem("url", "");
+  divDownload.style.display = "none";
+  btnSearch.style.backgroundImage = "url(./loading.svg)";
 
-  const videoTitle = document.getElementById("video-title");
-  videoTitle.textContent = "";
+  if (!isValidUrl(url.value)) {
+    message.textContent = "Invalid URL.";
+    return;
+  }
 
-  // videoTitle.textContent = url;
+  const value = await media.getVideo(url.value);
+  
+  title.textContent = value.title;
+  duration.textContent = value.duration;
 
-  // const value = await versions.getVideo(url);
+  thumbnail.src = value.image;
+  thumbnail.style.backgroundImage = `url(${value.image})`;
+  divDownload.style.display = "flex";
+  btnDownload.value = "Download";
+  video.style.backgroundColor = "#e8edef";
+  video.style.border = "1px solid #c4c9cb";
 
-  // imageVideo.setAttribute("src", value.image);
-  // console.log(value.image);
+  localStorage.setItem("url", url.value);
+  url.value = "";
+  btnSearch.style.backgroundImage = "url(./search.svg)";
+}
 
-  // videoTitle.textContent = value.title;
-
-  await versions.getVideo(url).then(value => {
-    imageVideo.setAttribute("src", value.image);
-    console.log(value.image);
-
-    videoTitle.textContent = value.title;
+async function downloadVideo() {
+  const url = localStorage.getItem("url");
+  const format = document.getElementById("format");
+  const selectedIndex = format.selectedIndex;
+  const selectedFormat = format.options[selectedIndex].value;
+  message.textContent = "";
+  
+  media.videoDownload(url, selectedFormat).then((response) => {
+    message.textContent = response.message;
+  }).catch((error) => {
+    message.textContent = error.message;
+  }).finally(() => {
+    setTimeout(() => {
+      message.textContent = "";
+    }, 5000);
   });
 }
 
-search.addEventListener("click", searchVideo);
+btnSearch.addEventListener("click", searchVideo);
+btnDownload.addEventListener("click", downloadVideo);
+btnLanguage.addEventListener("click", changeLanguage);
+
+// btnReload.addEventListener("click", () => window.location.reload());
