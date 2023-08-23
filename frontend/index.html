@@ -15,47 +15,59 @@
   <header>
     <nav>
       <div class="menu">
-        <a href="./index.html">Home</a>
-        <a href="./about.html">About</a>
+        <a href="./index.html" id="item-home" title="Home">Home</a>
+        <a href="./about.html" id="item-about" title="About">About</a>
       </div>
       <button id="btn-language">Change language</button>
     </nav>
   </header>
   <main class="container">
-    <div class="search">
-      <h1>Youtube Downloader</h1>
-      <div class="input">
-        <input type="text" name="url" id="url" class="input-url" placeholder="https://www.youtube.com/watch?v=ggG9ySCChYw">
-        <button class="btn-search" id="btn-search"></button>
-        <div id="loading" class="loading"></div>
-      </div>
-    </div>
-    <div class="content">
-      <div class="video" id="video">
-        <div id="result" class="box-result">
-          <div class="thumbnail" id="thumbnail"></div>
-        </div>
-        <div class="box-download" id="download">
-          <div class="infos">
-            <h3 class="title" id="title"></h3>
-            <h5 class="duration" id="duration"></h5>
-          </div>
-          <div class="download">
-            <select name="format" id="format">
-              <option value="mp4">MP4</option>
-              <option value="webm">WEBM</option>
-              <option value="mp3">MP3</option>
-            </select>
-            <button id="btn-download">Download</button>
-          </div>
+    <div class="video-box">
+      <div class="search">
+        <h1>Youtube Downloader</h1>
+        <div class="input">
+          <input type="text" name="url" id="url" class="input-url"
+            placeholder="https://www.youtube.com/watch?v=ggG9ySCChYw">
+          <button class="btn-search" id="btn-search"></button>
+          <div id="loading" class="loading"></div>
         </div>
       </div>
+      <div class="content">
+        <div class="video" id="video">
+          <div id="result" class="box-result">
+            <div class="thumbnail" id="thumbnail"></div>
+          </div>
+          <div class="box-download" id="download">
+            <div class="infos">
+              <h3 class="title" id="title"></h3>
+              <h5 class="duration" id="duration"></h5>
+            </div>
+            <div class="download">
+              <select name="format" id="format">
+                <option value="mp4">MP4</option>
+                <option value="webm">WEBM</option>
+                <option value="mp3">MP3</option>
+              </select>
+              <button id="btn-download">Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 id="message" class="message"></h4>
     </div>
     <footer>
-      <h4 id="message"></h4>
-      <div>
-        <h4>Download history</h4>
-        <div></div>
+      <div class="path-box">
+        <h4 id="title-download__path">Change destination location</h4>
+        <div class="path">
+          <!-- <input type="text"> -->
+          <input type="file" id="folder-path" style="display: none;" webkitdirectory directory multiple/>
+          <button id="btn-select">Get path</button>
+          <p id="view-path">Exibir</p>
+        </div>
+      </div>
+      <div class="history-box">
+        <h4 id="title-download__history">Download history</h4>
+        <div class="download-history-box"></div>
       </div>
     </footer>
   </main>
