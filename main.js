@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
 
 const pagePath = path.join(__dirname, "./frontend/index.html");
@@ -18,4 +18,14 @@ app.whenReady().then(() => {
 
   window.loadFile(pagePath);
   window.setMenuBarVisibility(true);
+
+  ipcMain.handle('abrirpasta', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog(window, {
+      properties: ['openDirectory']
+    });
+    if (canceled)
+      return;
+    
+    return filePaths[0];
+  })
 });

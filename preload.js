@@ -1,7 +1,6 @@
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 const ytdl = require("ytdl-core");
 const fs = require("fs");
-const path = require("path");
 const os = require("os");
 
 function secondsToHours(seconds) {
@@ -18,39 +17,58 @@ function secondsToHours(seconds) {
 }
 
 contextBridge.exposeInMainWorld("media", {
+  selectFolder: () => ipcRenderer.invoke('abrirpasta'),
   node: () => process.versions.node,
   chrome: () => process.versions.chrome,
   electron: () => process.versions.electron,
-  getVideo: async (url) => {
-    const video = await ytdl.getInfo(url);
-    console.log(video);
+  isValidURL: (url) => ytdl.validateURL(url),
+  getVideo: (url, lang = "en") => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!url)
+          return reject({
+            status: 400,
+            message: "Invalid URL"
+          });
 
-    return {
-      title: video.videoDetails.title,
-      url: video.videoDetails.video_url,
-      embed: video.videoDetails.embed.iframeUrl,
-      image: video.videoDetails.thumbnails[0].url.split("?")[0],
-      formats: ["mp4", "webm", "mp3"],
-      duration: secondsToHours(video.videoDetails.lengthSeconds)
-    };
+        const video = await ytdl.getInfo(url);
+
+        resolve({
+          title: video.videoDetails.title,
+          url: video.videoDetails.video_url,
+          embed: video.videoDetails.embed.iframeUrl,
+          image: video.videoDetails.thumbnails[0].url.split("?")[0],
+          formats: ["mp4", "webm", "mp3"],
+          duration: secondsToHours(video.videoDetails.lengthSeconds)
+        });
+      } catch (error) {
+        reject(error.message);
+      }
+    });
   },
-  videoDownload: (url, format = "mp4") => {
+  videoDownload: (url, format = "mp4", lang = "en") => {
     return new Promise(async (resolve, reject) => {
       try {
         const title = (await ytdl.getBasicInfo(url)).videoDetails.title;
-        const path = `${os.userInfo().homedir}\\Downloads\\${title}.${format}`;
+        // const path = `${os.userInfo().homedir}\\Downloads\\${title}.${format}`;
+        // const path = `${os.userInfo().homedir}/Downloads/${title}.${format}`;
+
+        const path = os.platform() == "linux" ?
+          `${os.userInfo().homedir}/Downloads/${title}.${format}` :
+          os.platform() == "win32" ? `${os.userInfo().homedir}\\Downloads\\${title}.${format}` :
+            undefined;
 
         if (!title) {
           return reject({
             status: 404,
-            message: "Video not found."
+            message: lang == "en" ? "Video not found" : "Vídeo não encontrado"
           });
         }
 
         if (!path) {
           return reject({
             status: 404,
-            message: "Path not found."
+            message: lang == "en" ? "Path not found" : "Caminho não encontrado"
           });
         }
 
@@ -63,7 +81,7 @@ contextBridge.exposeInMainWorld("media", {
 
         resolve({
           status: 200,
-          message: "Download completed successfully."
+          message: lang == "en" ? "Download completed successfully." : "Baixado com sucesso"
         });
       } catch (error) {
         return {
@@ -72,59 +90,5 @@ contextBridge.exposeInMainWorld("media", {
         };
       }
     });
-
-    // const video = await ytdl.getInfo(url);
-    // const filePath = `${os.userInfo().homedir}\\Downloads\\${video.videoDetails.title}.mp4`;
-    // // console.log(ytdl.chooseFormat(video.formats));
-    // const formatList = [];
-    // video.formats.map(format => {
-    //   if (format.mimeType.split(";")[0] === "video/mp4" && format.hasAudio && format.hasVideo) {
-    //     formatList.push(format);
-    //   }
-    // });
-
-    // console.log(formatList);
-    // const stream = ytdl(video, format);
-    // stream.pipe(fs.createWriteStream(filePath));
-
-    // return new Promise(async (resolve, reject) => {
-    //   const video = await ytdl.getInfo(url);
-    //   const format = ytdl.chooseFormat(video.formats, { quality: "highest", format: { itag: itag } });
-    //   try {
-    //     if (!format) {
-    //       reject({
-    //         code: 400,
-    //         message: 'Invalid itag or format not found.'
-    //       });
-    //       return;
-    //     }
-
-    //     const title = video.videoDetails.title;
-    //     const filePath = `${os.userInfo().homedir}\\Downloads\\${title}.mp4`;
-
-    //     const stream = ytdl(url, { format: format });
-
-    //     stream.pipe(fs.createWriteStream(filePath));
-
-    //     stream.on("end", () => {
-    //       resolve({
-    //         code: 200,
-    //         message: 'Download completed successfully.'
-    //       });
-    //     });
-
-    //     stream.on('error', (error) => {
-    //       reject({
-    //         code: 500,
-    //         message: error.message
-    //       });
-    //     });
-    //   } catch (error) {
-    //     reject({
-    //       code: 500,
-    //       message: error.message
-    //     });
-    //   }
-    // });
   }
 });
