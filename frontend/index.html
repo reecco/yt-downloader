@@ -5,7 +5,10 @@
   <meta charset="UTF-8" />
   <title>Youtube Downloader</title>
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="./css/navbar.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/about.css">
+  <link rel="stylesheet" href="./css/config.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
@@ -15,13 +18,14 @@
   <header>
     <nav>
       <div class="menu">
-        <a href="./index.html" id="item-home" title="Home">Home</a>
-        <a href="./about.html" id="item-about" title="About">About</a>
+        <button id="btn-item__home" title="Home">Home</button>
+        <button id="btn-item__about" title="About">About</button>
+        <button id="btn-item__config" title="Configuration"><span class="svg-config"></span></button>
       </div>
       <button id="btn-language">Change language</button>
     </nav>
   </header>
-  <main class="container">
+  <main class="container-home" id="container-home">
     <div class="video-box">
       <div class="search">
         <h1>Youtube Downloader</h1>
@@ -56,22 +60,57 @@
       <h4 id="message" class="message"></h4>
     </div>
     <footer>
-      <div class="path-box">
-        <h4 id="title-download__path">Change destination location</h4>
+      <!-- <div class="path-box">
+        <h4 id="title-download__path">Destination folder</h4>
         <div class="path">
-          <!-- <input type="text"> -->
-          <input type="file" id="folder-path" style="display: none;" webkitdirectory directory multiple/>
-          <button id="btn-select">Get path</button>
-          <p id="view-path">Exibir</p>
+          <input type="text" id="input-path" class="input-path">
+          <input type="file" id="folder-path" style="display: none;" webkitdirectory directory multiple />
+          <button id="btn-select">Select folder</button>
         </div>
-      </div>
+      </div> -->
       <div class="history-box">
         <h4 id="title-download__history">Download history</h4>
         <div class="download-history-box"></div>
       </div>
     </footer>
   </main>
+  <main class="container-about" id="container-about">
+    <div class="about-box">
+      <div class="text-box">
+        <h1 id="title-about">About</h1>
+        <h3 id="title-text">Youtube Downloader is an open source desktop project to download Youtube videos in MP4, MP3 and WEBM.</h3>
+        <div class="href">
+          <div class="href-box">
+            <p id="text-copy">Project repository available on</p>
+            <button class="btn-copy" id="btn-copy"></button>
+          </div>
+          <p class="message-copy" id="message-copy"></p>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-box">
+        <p class="copyright">&copy; <i id="year"></i> Fred Recco</p>
+        <p class="info" id="info"></p>
+      </div>
+    </footer>
+  </main>
+  <main class="container-config" id="container-config">
+    <div class="path-box">
+      <h4 id="title-download__path">Destination folder</h4>
+      <div class="path">
+        <input type="text" id="input-path" class="input-path">
+        <input type="file" id="folder-path" style="display: none;" webkitdirectory directory multiple />
+        <button id="btn-select">Select folder</button>
+      </div>
+    </div>
+  </main>
 </body>
-<script src="./renderer.js"></script>
+<script src="./js/element.js"></script>
+<script src="./js/language.js"></script>
+<script src="./js/navbar.js"></script>
+<script src="./js/renderer.js"></script>
+<script src="./js/about.js"></script>
+<script src="./js/config.js"></script>
 
 </html>

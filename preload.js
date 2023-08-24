@@ -22,13 +22,19 @@ contextBridge.exposeInMainWorld("media", {
   chrome: () => process.versions.chrome,
   electron: () => process.versions.electron,
   isValidURL: (url) => ytdl.validateURL(url),
+  getPath: () => {
+    return os.platform() == "linux" ?
+    `${os.userInfo().homedir}/Downloads/` :
+    os.platform() == "win32" ? `${os.userInfo().homedir}\\Downloads\\` :
+      undefined;
+  },
   getVideo: (url, lang = "en") => {
     return new Promise(async (resolve, reject) => {
       try {
         if (!url)
           return reject({
             status: 400,
-            message: "Invalid URL"
+            message: lang == "en" ? "Invalid URL" : "URL inválida"
           });
 
         const video = await ytdl.getInfo(url);
@@ -42,21 +48,30 @@ contextBridge.exposeInMainWorld("media", {
           duration: secondsToHours(video.videoDetails.lengthSeconds)
         });
       } catch (error) {
-        reject(error.message);
+        reject({
+          status: 500,
+          message: error.message
+        });
       }
     });
   },
-  videoDownload: (url, format = "mp4", lang = "en") => {
+  videoDownload: (url, format = "mp4", lang = "en", path) => {
     return new Promise(async (resolve, reject) => {
       try {
         const title = (await ytdl.getBasicInfo(url)).videoDetails.title;
-        // const path = `${os.userInfo().homedir}\\Downloads\\${title}.${format}`;
-        // const path = `${os.userInfo().homedir}/Downloads/${title}.${format}`;
 
-        const path = os.platform() == "linux" ?
-          `${os.userInfo().homedir}/Downloads/${title}.${format}` :
-          os.platform() == "win32" ? `${os.userInfo().homedir}\\Downloads\\${title}.${format}` :
-            undefined;
+        if (!path) {
+          path = os.platform() == "linux" ?
+            `${os.userInfo().homedir}/Downloads/${title}.${format}` :
+            os.platform() == "win32" ? `${os.userInfo().homedir}\\Downloads\\${title}.${format}` :
+              undefined;
+        } else {
+          path = os.platform() == "linux" ? 
+          `${path}/${title}.${format}` : 
+          os.platform() == "win32" ?
+          `${path}\\${title}.${format}` :
+          undefined
+        }
 
         if (!title) {
           return reject({

@@ -1,42 +1,12 @@
-// const information = document.getElementById('info');
-// information.textContent = `This app is using Chrome (v${media.chrome()}), Node.js (v${media.node()}), and Electron (v${media.electron()})`;
-
-let language;
-
 if (!localStorage.getItem("url_list"))
   localStorage.setItem("url_list", JSON.stringify([]));
 
 const urlList = JSON.parse(localStorage.getItem("url_list"));
 
-const btnLanguage = document.getElementById("btn-language");
-const aboutItem = document.getElementById("item-about");
-const btnSearch = document.getElementById("btn-search");
-const btnDownload = document.getElementById("btn-download");
-const message = document.getElementById("message");
-const video = document.getElementById("video");
-const downloadHistory = document.getElementById("title-download__history");
-
-function languagePage() {
-  language = localStorage.getItem("lang");
-
-  if (!language)
-    localStorage.setItem("lang", "en");
-
-  aboutItem.textContent = language == "en" ? "About" : "Sobre";
-  aboutItem.title = language == "en" ? "About" : "Sobre";
-
-  btnLanguage.textContent = language == "en" ? "EN" : "PT-BR";
-  btnLanguage.title = language == "en" ? "Mudar para português" : "Change to english";
-
-  btnDownload.textContent = language == "en" ? "Download" : "Baixar";
-
-  downloadHistory.textContent = language == "en" ? "Download history" : "Histórico de download";
-}
-
-function changeLanguage() {
-  language == "en" ? localStorage.setItem("lang", "pt-br") : localStorage.setItem("lang", "en");
-  window.location.reload();
-}
+const svg = {
+  search: "url(./svg/search.svg)",
+  loading: "url(./svg/loading.svg)"
+};
 
 function searchVideo() {
   const url = document.getElementById("url");
@@ -49,7 +19,7 @@ function searchVideo() {
   duration.textContent = "";
   localStorage.setItem("url", "");
   divDownload.style.display = "none";
-  btnSearch.style.backgroundImage = "url(./loading.svg)";
+  btnSearch.style.backgroundImage = svg.loading;
   thumbnail.src = "";
   thumbnail.style.backgroundImage = "none";
   divDownload.style.display = "none";
@@ -58,10 +28,14 @@ function searchVideo() {
 
   if (!media.isValidURL(url.value)) {
     setTimeout(() => {
-      btnSearch.style.backgroundImage = "url(./search.svg)";
+      btnSearch.style.backgroundImage = svg.search;
       message.textContent = language == "en" ? "Invalid URL" : "URL inválida";
+      message.style.backgroundColor = "red";
     }, 500);
-    setTimeout(() => message.textContent = "", 5000);
+    setTimeout(() => {
+      message.textContent = "";
+      message.style.backgroundColor = "transparent";
+    }, 5000);
     return;
   }
 
@@ -83,18 +57,24 @@ function searchVideo() {
       error == "Video unavailable" &&
         language == "pt-br" ? "Vídeo indisponível" :
         error;
+
+    message.style.backgroundColor = "red";
   }).finally(() => {
     url.value = "";
-    btnSearch.style.backgroundImage = "url(./search.svg)";
+    btnSearch.style.backgroundImage = svg.search;
     setTimeout(() => {
       message.textContent = "";
+      message.style.backgroundColor = "transparent";
     }, 5000);
   });
 }
 
+btnSearch.addEventListener("click", searchVideo);
+
 function downloadVideo() {
   const url = localStorage.getItem("url");
   const lang = localStorage.getItem("lang") || "en";
+  const path = localStorage.getItem("path");
   const format = document.getElementById("format");
   const selectedIndex = format.selectedIndex;
   const selectedFormat = format.options[selectedIndex].value;
@@ -102,16 +82,20 @@ function downloadVideo() {
 
   if (!url) {
     message.textContent = language == "en" ? "URL not found" : "URl não encontrada";
+    message.style.backgroundColor = "red";
     return;
   }
 
-  media.videoDownload(url, selectedFormat, lang).then((response) => {
+  media.videoDownload(url, selectedFormat, lang, path).then((response) => {
     message.textContent = response.message;
+    message.style.ebackgroundColor = response.status == 200 ? "green" : "red";
   }).catch((error) => {
     message.textContent = error.message;
+    message.style.backgroundColor = "red";
   }).finally(() => {
     setTimeout(() => {
       message.textContent = "";
+      message.style.backgroundColor = "transparent";
     }, 5000);
   });
 
@@ -128,21 +112,4 @@ function downloadVideo() {
   localStorage.setItem("url_list", JSON.stringify(urlList));
 }
 
-btnSearch.addEventListener("click", searchVideo);
 btnDownload.addEventListener("click", downloadVideo);
-btnLanguage.addEventListener("click", changeLanguage);
-languagePage();
-
-const folderPathInput = document.getElementById("folder-path");
-const btnSelect = document.getElementById("btn-select");
-const viewPath = document.getElementById("view-path");
-
-btnSelect.addEventListener("click", () => {
-  window.media.selectFolder().then(result => console.log(result));
-});
-
-folderPathInput.addEventListener("change", (event) => {
-  const seletedPath = event.target.files[0].path;
-  viewPath.textContent = seletedPath;
-  console.log(seletedPath);
-});
