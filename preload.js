@@ -96,6 +96,7 @@ contextBridge.exposeInMainWorld("media", {
 
         resolve({
           status: 200,
+          title: title,
           message: lang == "en" ? "Download completed successfully." : "Baixado com sucesso"
         });
       } catch (error) {
