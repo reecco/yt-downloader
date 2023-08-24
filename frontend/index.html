@@ -47,12 +47,12 @@
               <h5 class="duration" id="duration"></h5>
             </div>
             <div class="download">
-              <select name="format" id="format">
+              <select name="format" id="format" class="format">
                 <option value="mp4">MP4</option>
                 <option value="webm">WEBM</option>
                 <option value="mp3">MP3</option>
               </select>
-              <button id="btn-download">Download</button>
+              <button class="btn-download" id="btn-download">Download</button>
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@
       </div> -->
       <div class="history-box">
         <h4 id="title-download__history">Download history</h4>
-        <div class="download-history-box"></div>
+        <div class="download-history-box" id="download-history"></div>
       </div>
     </footer>
   </main>
@@ -96,12 +96,14 @@
     </footer>
   </main>
   <main class="container-config" id="container-config">
-    <div class="path-box">
-      <h4 id="title-download__path">Destination folder</h4>
-      <div class="path">
-        <input type="text" id="input-path" class="input-path">
-        <input type="file" id="folder-path" style="display: none;" webkitdirectory directory multiple />
-        <button id="btn-select">Select folder</button>
+    <div class="config">
+      <div class="path-box">
+        <h3 id="title-download__path">Destination folder</h3>
+        <div class="path">
+          <input type="text" id="input-path" class="input-path" readonly>
+          <input type="file" id="folder-path" style="display: none;" webkitdirectory directory multiple />
+          <button id="btn-select">Select folder</button>
+        </div>
       </div>
     </div>
   </main>
