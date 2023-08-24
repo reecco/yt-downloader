@@ -1,0 +1,7 @@
+.container-config {
+  display: none;
+  flex-direction: column;
+  background-color: #3c3c3f;
+  height: 100%;
+  width: 100%;
+}
