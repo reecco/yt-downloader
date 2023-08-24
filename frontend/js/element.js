@@ -12,6 +12,7 @@ const btnDownload = document.getElementById("btn-download");
 const message = document.getElementById("message");
 const video = document.getElementById("video");
 const downloadHistory = document.getElementById("title-download__history");
+const divDownloadHistory = document.getElementById("download-history");
 /* container-home */
 
 /* container-about */

@@ -3,6 +3,8 @@ let language = localStorage.getItem("lang");
 if (!language)
   localStorage.setItem("lang", "en");
 
+language = localStorage.getItem("lang");
+
 /* Navbar */
 btnAboutItem.textContent = language == "en" ? "About" : "Sobre";
 btnAboutItem.title = language == "en" ? "About" : "Sobre";

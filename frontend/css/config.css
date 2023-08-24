@@ -5,3 +5,21 @@
   height: 100%;
   width: 100%;
 }
+
+/* .container-config .config {
+  padding: 30px 0;
+} */
+
+.container-config .config .path-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 250px;
+  justify-content: space-around;
+  padding: 40px 0;
+}
+
+.container-config .config .path-box h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+}

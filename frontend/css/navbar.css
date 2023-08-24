@@ -26,12 +26,12 @@ header nav .menu button {
   font-size: 1.1rem;
   cursor: pointer;
   background-color: transparent;
+  transition: .2s;
 }
 
 header nav .menu button:hover {
   background-color: #fefefe;
   color: #2c2c2e;
-  transition: .2s;
 }
 
 header nav .menu button:active {

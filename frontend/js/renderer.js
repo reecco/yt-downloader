@@ -5,8 +5,43 @@ const urlList = JSON.parse(localStorage.getItem("url_list"));
 
 const svg = {
   search: "url(./svg/search.svg)",
-  loading: "url(./svg/loading.svg)"
+  loading: {
+    light: "url(./svg/loading-light.svg)",
+    black: "url(./svg/loading-black.svg)"
+  }
 };
+
+urlList.reverse().map((url) => {
+  const info = document.createElement("div");
+  const thumb = document.createElement("div");
+  const boxMargin = document.createElement("div");
+  const infoBox = document.createElement("div");
+  const title = document.createElement("h5");
+  const format = document.createElement("p");
+  divDownloadHistory.appendChild(info);
+  info.appendChild(boxMargin);
+  boxMargin.appendChild(thumb);
+  boxMargin.appendChild(infoBox);
+  boxMargin.className = "box-margin";
+  infoBox.appendChild(title);
+  infoBox.appendChild(format);
+  info.className = "url-box";
+  infoBox.className = "info-history";
+  title.textContent = url.title.length > 30 ? `${url.title}...` : url.title;
+  format.textContent = url.format;
+  thumb.style.backgroundImage = url.thumbnail;
+  thumb.className = "thumb";
+});
+
+function addUrlElementChild(url) {
+  if (urlList.length >= 5) {
+    urlList.reverse().shift();
+  }
+
+  urlList.push(url);
+
+  localStorage.setItem("url_list", JSON.stringify(urlList));
+}
 
 function searchVideo() {
   const url = document.getElementById("url");
@@ -19,7 +54,7 @@ function searchVideo() {
   duration.textContent = "";
   localStorage.setItem("url", "");
   divDownload.style.display = "none";
-  btnSearch.style.backgroundImage = svg.loading;
+  btnSearch.style.backgroundImage = svg.loading.light;
   thumbnail.src = "";
   thumbnail.style.backgroundImage = "none";
   divDownload.style.display = "none";
@@ -30,11 +65,14 @@ function searchVideo() {
     setTimeout(() => {
       btnSearch.style.backgroundImage = svg.search;
       message.textContent = language == "en" ? "Invalid URL" : "URL inválida";
-      message.style.backgroundColor = "red";
+      message.style.backgroundColor = "#fa7e7e";
+      message.style.border = "1px solid #f85050";
+      message.style.color = "#fefefe";
     }, 500);
     setTimeout(() => {
       message.textContent = "";
       message.style.backgroundColor = "transparent";
+      message.style.border = "none";
     }, 5000);
     return;
   }
@@ -54,17 +92,20 @@ function searchVideo() {
     localStorage.setItem("url", url.value);
   }).catch((error) => {
     message.textContent =
-      error == "Video unavailable" &&
+      error.message == "Video unavailable" &&
         language == "pt-br" ? "Vídeo indisponível" :
-        error;
+        error.message;
 
-    message.style.backgroundColor = "red";
+    message.style.backgroundColor = "#fa7e7e";
+    message.style.border = "1px solid #f85050";
+    message.style.color = "#fefefe";
   }).finally(() => {
     url.value = "";
     btnSearch.style.backgroundImage = svg.search;
     setTimeout(() => {
       message.textContent = "";
       message.style.backgroundColor = "transparent";
+      message.style.border = "none";
     }, 5000);
   });
 }
@@ -79,37 +120,39 @@ function downloadVideo() {
   const selectedIndex = format.selectedIndex;
   const selectedFormat = format.options[selectedIndex].value;
   message.textContent = "";
+  btnDownload.textContent = language == "en" ? "Downloading..." : "Baixando...";
 
   if (!url) {
     message.textContent = language == "en" ? "URL not found" : "URl não encontrada";
     message.style.backgroundColor = "red";
+    message.textContent = "";
+    btnDownload.textContent = language == "en" ? "Download" : "Baixar";
     return;
   }
 
   media.videoDownload(url, selectedFormat, lang, path).then((response) => {
     message.textContent = response.message;
     message.style.ebackgroundColor = response.status == 200 ? "green" : "red";
+
+    const urlElement = {
+      url: url,
+      format: selectedFormat,
+      thumbnail: document.getElementById("thumbnail").style.backgroundImage,
+      title: response.title
+    };
+
+    addUrlElementChild(urlElement);
   }).catch((error) => {
     message.textContent = error.message;
     message.style.backgroundColor = "red";
   }).finally(() => {
+    btnDownload.textContent = language == "en" ? "Download" : "Baixar";
     setTimeout(() => {
       message.textContent = "";
       message.style.backgroundColor = "transparent";
+      window.location.reload();
     }, 5000);
   });
-
-  if (urlList.length >= 5) {
-    urlList.shift();
-  }
-
-  urlList.push({
-    url: url,
-    format: selectedFormat,
-    thumbnail: document.getElementById("thumbnail").style.backgroundImage
-  });
-
-  localStorage.setItem("url_list", JSON.stringify(urlList));
 }
 
 btnDownload.addEventListener("click", downloadVideo);
