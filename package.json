@@ -6,7 +6,8 @@
   "type": "commonjs",
   "dependencies": {
     "electron": "^26.0.0",
-    "ytdl-core": "^4.11.5"
+    "ytdl-core": "^4.11.5",
+    "ytpl": "^2.3.0"
   },
   "scripts": {
     "start": "electron .",
