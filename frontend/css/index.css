@@ -233,6 +233,10 @@ body {
   border-radius: 10px;
 }
 
+.container-home footer .history-box .download-history-box::-webkit-scrollbar-thumb:hover {
+  background-color: #90979a;
+}
+
 .container-home footer .history-box .download-history-box .url-box {
   /* height: 20%; */
   /* height: 100px;

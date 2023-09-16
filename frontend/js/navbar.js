@@ -1,20 +1,24 @@
-btnHomeItem.addEventListener("click", () => {
-  containerHome.style.display = "flex";
-  containerAbout.style.display = "none";
-  containerConfig.style.display = "none";
-});
+const containerMap = {
+  home: containerHome,
+  about: containerAbout,
+  playlist: containerPlaylist,
+  config: containerConfig,
+};
 
-btnAboutItem.addEventListener("click", () => {
-  containerHome.style.display = "none";
-  containerAbout.style.display = "flex";
-  containerConfig.style.display = "none";
-});
+function showPage(pageName) {
+  for (const key in containerMap) {
+    containerMap[key].style.display = key === pageName ? "flex" : "none";
+  }
+  localStorage.setItem("page", pageName);
+}
 
-btnConfigItem.addEventListener("click", () => {
-  containerHome.style.display = "none";
-  containerAbout.style.display = "none";
-  containerConfig.style.display = "flex";
-});
+btnHomeItem.addEventListener("click", () => showPage("home"));
+btnAboutItem.addEventListener("click", () => showPage("about"));
+btnPlaylistItem.addEventListener("click", () => showPage("playlist"));
+btnConfigItem.addEventListener("click", () => showPage("config"));
+
+const currentPage = localStorage.getItem("page") || "home";
+showPage(currentPage);
 
 btnLanguage.addEventListener("click", () => {
   language == "en" ?

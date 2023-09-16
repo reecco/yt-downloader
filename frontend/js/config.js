@@ -8,6 +8,9 @@ inputPath.value = localStorage.getItem("path");
 
 function folderPath() {
   window.media.selectFolder().then(result => {
+    if (!result)
+      result = media.getPath();
+
     inputPath.value = result;
     localStorage.setItem("path", result);
   });

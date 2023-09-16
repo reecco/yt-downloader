@@ -8,7 +8,10 @@ const svg = {
   loading: {
     light: "url(./svg/loading-light.svg)",
     black: "url(./svg/loading-black.svg)"
-  }
+  },
+  checked: "url(./svg/check.svg)",
+  paste: "url(./svg/paste.svg)",
+  clear: "url(./svg/clear.svg)"
 };
 
 urlList.reverse().map((url) => {
@@ -27,7 +30,7 @@ urlList.reverse().map((url) => {
   infoBox.appendChild(format);
   info.className = "url-box";
   infoBox.className = "info-history";
-  title.textContent = url.title.length > 30 ? `${url.title}...` : url.title;
+  title.textContent = url.title.length > 40 ? `${url.title.slice(0, 40)}...` : url.title;
   format.textContent = url.format;
   thumb.style.backgroundImage = url.thumbnail;
   thumb.className = "thumb";
@@ -120,7 +123,7 @@ function downloadVideo() {
   const selectedIndex = format.selectedIndex;
   const selectedFormat = format.options[selectedIndex].value;
   message.textContent = "";
-  btnDownload.textContent = language == "en" ? "Downloading..." : "Baixando...";
+  btnDownload.textContent = language == "en" ? "Downloading..." : "Baixando..."; //Change to svg loading
 
   if (!url) {
     message.textContent = language == "en" ? "URL not found" : "URl não encontrada";

@@ -6,6 +6,7 @@
   <title>Youtube Downloader</title>
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="./css/navbar.css">
+  <link rel="stylesheet" href="./css/playlist.css">
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/about.css">
   <link rel="stylesheet" href="./css/config.css">
@@ -20,6 +21,7 @@
       <div class="menu">
         <button id="btn-item__home" title="Home">Home</button>
         <button id="btn-item__about" title="About">About</button>
+        <button id="btn-item__playlist" title="Playlist">Playlist</button>
         <button id="btn-item__config" title="Configuration"><span class="svg-config"></span></button>
       </div>
       <button id="btn-language">Change language</button>
@@ -60,14 +62,6 @@
       <h4 id="message" class="message"></h4>
     </div>
     <footer>
-      <!-- <div class="path-box">
-        <h4 id="title-download__path">Destination folder</h4>
-        <div class="path">
-          <input type="text" id="input-path" class="input-path">
-          <input type="file" id="folder-path" style="display: none;" webkitdirectory directory multiple />
-          <button id="btn-select">Select folder</button>
-        </div>
-      </div> -->
       <div class="history-box">
         <h4 id="title-download__history">Download history</h4>
         <div class="download-history-box" id="download-history"></div>
@@ -78,7 +72,8 @@
     <div class="about-box">
       <div class="text-box">
         <h1 id="title-about">About</h1>
-        <h3 id="title-text">Youtube Downloader is an open source desktop project to download Youtube videos in MP4, MP3 and WEBM.</h3>
+        <h3 id="title-text">Youtube Downloader is an open source desktop project to download Youtube videos in MP4, MP3
+          and WEBM.</h3>
         <div class="href">
           <div class="href-box">
             <p id="text-copy">Project repository available on</p>
@@ -94,6 +89,23 @@
         <p class="info" id="info"></p>
       </div>
     </footer>
+  </main>
+  <main class="container-playlist" id="container-playlist">
+    <div class="playlist-box">
+      <div class="search">
+        <h3>Playlist</h3>
+        <div class="input">
+          <div class="input-custom">
+            <input type="text" name="url" id="playlist__url" class="input-url"
+              placeholder="Paste playlist link here">
+            <button class="btn-paste__playlist" id="btn-paste__playlist"></button>
+          </div>
+          <button class="btn-search" id="btn-search__playlist"></button>
+          <div id="loading" class="loading"></div>
+        </div>
+      </div>
+      <div class="playlist__items-box" id="playlist__items-box"></div>
+    </div>
   </main>
   <main class="container-config" id="container-config">
     <div class="config">
@@ -113,6 +125,7 @@
 <script src="./js/navbar.js"></script>
 <script src="./js/renderer.js"></script>
 <script src="./js/about.js"></script>
+<script src="./js/playlist.js"></script>
 <script src="./js/config.js"></script>
 
 </html>

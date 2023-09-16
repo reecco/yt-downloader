@@ -2,7 +2,8 @@
 const btnLanguage = document.getElementById("btn-language");
 const btnHomeItem = document.getElementById("btn-item__home");
 const btnAboutItem = document.getElementById("btn-item__about");
-const btnConfigItem = document.getElementById("btn-item__config")
+const btnConfigItem = document.getElementById("btn-item__config");
+const btnPlaylistItem = document.getElementById("btn-item__playlist");
 /* navbar */
 
 /* container-home */
@@ -33,5 +34,11 @@ const downloadPath = document.getElementById("title-download__path");
 const folderPathInput = document.getElementById("folder-path");
 const inputPath = document.getElementById("input-path");
 /* container-path */
-/* */
-/* */
+
+/* container-playlist */
+const inputPlaylist = document.getElementById("playlist__url");
+const btnPastePlaylist = document.getElementById("btn-paste__playlist");
+const containerPlaylist = document.getElementById("container-playlist");
+const btnSearchPlaylist = document.getElementById("btn-search__playlist");
+const itemsBox = document.getElementById("playlist__items-box");
+/* container-playlist */

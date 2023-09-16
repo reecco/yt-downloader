@@ -26,8 +26,8 @@ aboutTitle.textContent =
 
 information.textContent =
   language == "en" ?
-    `This app is using Chrome (v${media.chrome()}), Node.js (v${media.node()}), and Electron (v${media.electron()})` :
-    `Esse aplicativo está usando Chrome (v${media.chrome()}), Node.js (v${media.node()}), e Electron (v${media.electron()})`;
+    `This app is using Chrome (v${media.chrome()}), Node.js (v${media.node()}) and Electron (v${media.electron()})` :
+    `Esse aplicativo está usando Chrome (v${media.chrome()}), Node.js (v${media.node()}) e Electron (v${media.electron()})`;
 
 year.textContent = new Date().getUTCFullYear();
 
@@ -46,3 +46,7 @@ textCopy.textContent =
 downloadPath.textContent = language == "en" ? "Destination folder" : "Pasta de destino";
 btnSelect.textContent = language == "en" ? "Select folder" : "Selecionar pasta";
 /* container-path */
+
+/* container-playlist */
+inputPlaylist.placeholder = language == "en" ? "Paste playlist link here" : "Cole o link da playlist aqui";
+/* container-playlist */
