@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 const ytdl = require("ytdl-core");
 const fs = require("fs");
 const os = require("os");
+const ytpl = require("ytpl");
 
 function secondsToHours(seconds) {
   const date = new Date(seconds * 1000);
@@ -24,18 +25,19 @@ contextBridge.exposeInMainWorld("media", {
   isValidURL: (url) => ytdl.validateURL(url),
   getPath: () => {
     return os.platform() == "linux" ?
-    `${os.userInfo().homedir}/Downloads/` :
-    os.platform() == "win32" ? `${os.userInfo().homedir}\\Downloads\\` :
-      undefined;
+      `${os.userInfo().homedir}/Downloads/` :
+      os.platform() == "win32" ? `${os.userInfo().homedir}\\Downloads\\` :
+        undefined;
   },
   getVideo: (url, lang = "en") => {
     return new Promise(async (resolve, reject) => {
       try {
-        if (!url)
+        if (!url) {
           return reject({
             status: 400,
             message: lang == "en" ? "Invalid URL" : "URL inválida"
           });
+        }
 
         const video = await ytdl.getInfo(url);
 
@@ -66,11 +68,11 @@ contextBridge.exposeInMainWorld("media", {
             os.platform() == "win32" ? `${os.userInfo().homedir}\\Downloads\\${title}.${format}` :
               undefined;
         } else {
-          path = os.platform() == "linux" ? 
-          `${path}/${title}.${format}` : 
-          os.platform() == "win32" ?
-          `${path}\\${title}.${format}` :
-          undefined
+          path = os.platform() == "linux" ?
+            `${path}/${title}.${format}` :
+            os.platform() == "win32" ?
+              `${path}\\${title}.${format}` :
+              undefined
         }
 
         if (!title) {
@@ -80,24 +82,20 @@ contextBridge.exposeInMainWorld("media", {
           });
         }
 
-        if (!path) {
-          return reject({
-            status: 404,
-            message: lang == "en" ? "Path not found" : "Caminho não encontrado"
-          });
-        }
-
         const chooseFormat =
           format == "mp4" || format == "webm" ? "videoandaudio" : "audioonly";
 
-        const stream = ytdl(url, { filter: chooseFormat, quality: "highest" });
+        const chooseQuality =
+          format == "mp4" || format == "web" ? "highestvideo" : "highestaudio";
+
+        const stream = ytdl(url, { filter: chooseFormat, quality: "highestvideo", format: { quality: "hd1080" } });
 
         stream.pipe(fs.createWriteStream(path));
 
         resolve({
           status: 200,
           title: title,
-          message: lang == "en" ? "Download completed successfully." : "Baixado com sucesso"
+          message: lang == "en" ? "Download completed successfully." : "Download concluído com sucesso"
         });
       } catch (error) {
         return {
@@ -106,5 +104,41 @@ contextBridge.exposeInMainWorld("media", {
         };
       }
     });
+  },
+  getPlaylist: (url, lang = "en") => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!url) {
+          return reject({
+            status: 400,
+            message: lang == "en" ? "Please enter a valid URL" : "Por favor, insira uma URL válida"
+          });
+        }
+
+        const id = await ytpl.getPlaylistID(url);
+
+        const playlist = await ytpl(id);
+
+        resolve({
+          videos: playlist.items,
+          title: playlist.title,
+          author: playlist.author
+        });
+      } catch (error) {
+        reject({
+          status: 500,
+          message: error.message
+        });
+      }
+    });
+  },
+  isValidID: async (url) => {
+    try {
+      const id = await ytpl.getPlaylistID(url);
+
+      return ytpl.validateID(id);
+    } catch (error) {
+      return false;
+    }
   }
 });

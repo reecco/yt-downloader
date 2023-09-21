@@ -1,25 +1,110 @@
 .container-config {
   display: none;
   flex-direction: column;
-  background-color: #3c3c3f;
   height: 100%;
   width: 100%;
+  padding: 30px;
 }
 
-/* .container-config .config {
-  padding: 30px 0;
-} */
+.container-config .config {
+  background-color: rgba(60, 60, 63, 0.35);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
 
 .container-config .config .path-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 250px;
+  height: 200px;
   justify-content: space-around;
   padding: 40px 0;
 }
 
 .container-config .config .path-box h3 {
-  font-size: 1.2rem;
+  font-size: var(--h3-title);
   font-weight: 500;
+}
+
+.container-config .config .path-box .path {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.container-config .config .path-box .path .input-path {
+  background-color: rgba(251, 250, 251, 0.2);
+  border-radius: 5px;
+  height: 40px;
+  font-size: .9rem;
+  padding-left: 5px;
+  cursor: default;
+}
+
+.container-config .config .path-box .path .input-path:focus {
+  outline: none;
+}
+
+.container-config .config .path-box .path .btn-change {
+  height: 40px;
+  width: 175px;
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgba(251, 250, 251, 0.7);
+}
+
+.container-config .config .path-box .path .btn-change:hover {
+  background-color: rgba(251, 250, 251, 0.5);
+}
+
+.container-config .config .path-box .path .btn-change:active {
+  background-color: rgba(251, 250, 251, 0.7);
+}
+
+.container-config .config .path-box .path .btn-change .folder-icon {
+  background-image: url(../svg/folder.svg);
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+}
+
+.container-config .config .path-box .path .btn-change p {
+  /* width: 40%; */
+  font-size: .9rem;
+  margin-left: 10px;
+}
+
+.container-config .config .theme-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 200px;
+  padding: 40px 0;
+}
+
+.container-config .config .theme-box h3 {
+  font-size: var(--h3-title);
+  font-weight: 500;
+}
+
+.container-config .config .theme-box .theme form {
+  display: flex;
+  justify-content: space-around;
+  width: 200px;
+}
+
+.container-config .config .theme-box .theme form .input-box input,
+.container-config .config .theme-box .theme form .input-box label {
+  cursor: pointer;
 }

@@ -17,3 +17,35 @@ function folderPath() {
 }
 
 btnSelect.addEventListener("click", folderPath);
+
+const theme = localStorage.getItem("theme") || "static";
+
+const radios = {
+  static: {
+    element: document.getElementById("static-theme")
+  },
+  animated: {
+    element: document.getElementById("animated-theme")
+  }
+};
+
+for (const radio in radios) {
+  radios[radio].element.addEventListener("click", () => {
+    if (radios[radio].element.value == "animated") {
+      localStorage.setItem("theme", "animated");
+      main.classList.add("animated");
+      return;
+    }
+
+    localStorage.setItem("theme", "static");
+    main.classList.remove("animated");
+  });
+}
+
+if (theme == "static") {
+  main.classList.remove("animated");
+  radios["static"].element.checked = true;
+} else {
+  main.classList.add("animated");
+  radios["animated"].element.checked = true;
+}

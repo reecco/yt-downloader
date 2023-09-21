@@ -1,7 +1,11 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
 
+process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = true;
+
 const pagePath = path.join(__dirname, "./frontend/index.html");
+
+const command = process.argv[1];
 
 app.whenReady().then(() => {
   const window = new BrowserWindow({
@@ -17,15 +21,17 @@ app.whenReady().then(() => {
   })
 
   window.loadFile(pagePath);
-  window.setMenuBarVisibility(true);
+  window.setMenuBarVisibility(command == "main.js");
 
   ipcMain.handle('abrirpasta', async () => {
     const { canceled, filePaths } = await dialog.showOpenDialog(window, {
       properties: ['openDirectory']
     });
-    if (canceled)
+
+    if (canceled) {
       return;
+    }
     
     return filePaths[0];
-  })
+  });
 });

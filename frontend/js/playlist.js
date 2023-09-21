@@ -8,7 +8,7 @@ const randomValue = (value = "") => {
   return randomValue(value += values[Math.floor(Math.random() * values.length)]);
 }
 
-async function playlistPasteOrClear() {
+const playlistPasteOrClear = async () => {
   const url = document.getElementById("playlist__url");
 
   if (url.value.length > 0) {
@@ -19,11 +19,6 @@ async function playlistPasteOrClear() {
     url.value = result;
     btnPastePlaylist.style.backgroundImage = svg.clear;
   }
-}
-
-function playlistInputClear() {
-  const url = document.getElementById("playlist__url");
-  url.value = "";
 }
 
 inputPlaylist.addEventListener("input", (event) => {
@@ -37,6 +32,12 @@ inputPlaylist.addEventListener("input", (event) => {
 });
 
 async function searchPlaylist() {
+  const lang = localStorage.getItem("lang") || "en";
+  btnSearchPlaylist.disabled = true;
+  btnSearch.disabled = true;
+  itemsBox.classList.remove("view");
+  btnSearchPlaylist.classList.add("loading");
+
   const elementsBox = {
     titleBox: document.getElementById("title-box"),
     videosBox: document.getElementById("videos-box"),
@@ -50,30 +51,35 @@ async function searchPlaylist() {
     }
   }
 
-  btnSearchPlaylist.style.backgroundImage = svg.loading.light;
   const url = document.getElementById("playlist__url").value;
 
   const result = await media.isValidID(url);
 
   if (!result) {
     setTimeout(() => {
-      btnSearchPlaylist.style.backgroundImage = svg.search;
-    }, 500);
+      btnSearchPlaylist.classList.remove("loading");
+      const message = language == "en" ? "Please enter a valid URL" : "Por favor, insira uma URL válida";
 
-    console.log(result);
+      modalProgress({ display: "flex", bgColor: "#dc3545", color: "#fefefe", borderColor: "#c41728", message: message });
+    }, 500);
+    setTimeout(() => {
+      btnSearchPlaylist.disabled = false;
+      btnSearch.disabled = false;
+    }, 3125);
     return;
   }
 
-  media.getPlaylist(url).then((response) => {
+  media.getPlaylist(url, lang).then((response) => {
+    itemsBox.classList.add("view");
     const titleBox = document.createElement("div");
     titleBox.className = "title-box";
     titleBox.id = "title-box";
 
     const author = document.createElement("h5");
-    author.textContent = response.author.name;
+    author.textContent = response.author.name.length > 15 ? `${response.author.name.slice(0, 15)}...` : response.author.name;
 
     const name = document.createElement("h6");
-    name.textContent = response.title;
+    name.textContent = response.title.length > 15 ? `${response.title.slice(0, 15)}...` : response.title;
 
     const box = document.createElement("div");
     box.id = "videos-box";
@@ -89,7 +95,7 @@ async function searchPlaylist() {
     const btnDownload = document.createElement("button");
     btnDownload.className = "btn__download-playlist";
     btnDownload.id = "btn__download-playlist";
-    btnDownload.textContent = language == "en" ? "Download" : "Baixar";
+    btnDownload.title = language == "en" ? "Download" : "Baixar";
 
     const formats = ["mp4", "webm", "mp3"];
 
@@ -195,24 +201,45 @@ async function searchPlaylist() {
       videos.appendChild(item);
     });
 
-    // console.log(response);
-
     document.getElementById("btn__download-playlist").addEventListener("click", downloadPlaylist);
   }).catch((error) => {
-    console.log("The playlist does not exist");
+    setTimeout(() => {
+      const message = language == "en" ? "The playlist does not exist" : "Playlist não existe";
+
+      modalProgress({ display: "flex", bgColor: "#dc3545", color: "#fefefe", borderColor: "#c41728", message: message });
+    }, 500);
   }).finally(() => {
-    btnSearchPlaylist.style.backgroundImage = svg.search;
+    btnSearchPlaylist.classList.remove("loading");
+    setTimeout(() => {
+      btnSearchPlaylist.disabled = false;
+      btnSearch.disabled = false;
+    }, 3125);
   });
 }
 
 async function downloadPlaylist() {
   const videoDiv = document.getElementById("videos-playlist");
   const path = localStorage.getItem("path");
+  const btnDownloadPlaylist = document.getElementById("btn__download-playlist");
+  btnDownloadPlaylist.disabled = true;
 
   const playlistDiv = videoDiv.childNodes;
 
+  if (!playlistDiv.length) {
+    setTimeout(() => {
+      btnSearchPlaylist.style.backgroundImage = svg.search;
+      const message = language == "en" ? "Playlist videos were not found" : "Os vídeos da playlist não foram encontrados";
+
+      modalProgress({ display: "flex", bgColor: "#dc3545", color: "#fefefe", borderColor: "#c41728", message: message });
+    }, 500);
+
+    setTimeout(() => btnDownloadPlaylist.disabled = false, 3125);
+    return;
+  }
+
   const loadingAll = document.querySelectorAll("#loading-video-downloading");
   loadingAll.forEach((loading) => loading.style.backgroundImage = "none");
+  btnDownloadPlaylist.classList.add("loading");
 
   const playlist = [];
 
@@ -232,14 +259,13 @@ async function downloadPlaylist() {
     const loading = document.querySelector(video.loadingSelector);
 
     try {
-      video.included ?
-        (() => {
-          loading.style.backgroundImage = svg.loading.black;
-          video.id.scrollIntoView({ behavior: "smooth" });
-        })() :
+      if (video.included) {
+        loading.style.backgroundImage = svg.loading.black;
+        video.id.scrollIntoView({ behavior: "smooth" });
+        await media.videoDownload(video.url, video.format(), "en", path);
+      } else {
         loading.style.backgroundImage = "none";
-
-      await media.videoDownload(video.url, video.format(), "en", path);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -248,6 +274,12 @@ async function downloadPlaylist() {
         loading.style.backgroundImage = "none";
     }
   }
+
+  const message = language == "en" ? "Download completed successfully." : "Download concluído com sucesso";
+
+  modalProgress({ display: "flex", bgColor: "#28a745", color: "#fefefe", borderColor: "#178731", message: message });
+  setTimeout(() => btnDownloadPlaylist.disabled = false, 3125);
+  btnDownloadPlaylist.classList.remove("loading");
 }
 
 btnPastePlaylist.addEventListener("click", playlistPasteOrClear);

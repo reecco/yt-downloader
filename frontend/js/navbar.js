@@ -1,21 +1,33 @@
 const containerMap = {
-  home: containerHome,
-  about: containerAbout,
-  playlist: containerPlaylist,
-  config: containerConfig,
+  home: {
+    container: containerHome,
+    button: btnHomeItem
+  },
+  about: {
+    container: containerAbout,
+    button: btnAboutItem
+  },
+  playlist: {
+    container: containerPlaylist,
+    button: btnPlaylistItem
+  },
+  config: {
+    container: containerConfig,
+    button: btnConfigItem
+  },
 };
 
 function showPage(pageName) {
   for (const key in containerMap) {
-    containerMap[key].style.display = key === pageName ? "flex" : "none";
+    containerMap[key].container.style.display = key === pageName ? "flex" : "none";
+    containerMap[key].button.style.fontWeight = key === pageName ? "bold" : "400";
   }
   localStorage.setItem("page", pageName);
 }
 
-btnHomeItem.addEventListener("click", () => showPage("home"));
-btnAboutItem.addEventListener("click", () => showPage("about"));
-btnPlaylistItem.addEventListener("click", () => showPage("playlist"));
-btnConfigItem.addEventListener("click", () => showPage("config"));
+for (const key in containerMap) {
+  containerMap[key].button.addEventListener("click", () => showPage(key));
+}
 
 const currentPage = localStorage.getItem("page") || "home";
 showPage(currentPage);

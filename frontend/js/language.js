@@ -4,18 +4,22 @@ if (!language)
   localStorage.setItem("lang", "en");
 
 language = localStorage.getItem("lang");
+document.documentElement.lang = language;
 
 /* Navbar */
 btnAboutItem.textContent = language == "en" ? "About" : "Sobre";
 btnAboutItem.title = language == "en" ? "About" : "Sobre";
-btnConfigItem.title = language == "en" ? "Configuration" : "Configuração";
-btnLanguage.textContent = language == "en" ? "EN" : "PT-BR";
+btnConfigItem.title = language == "en" ? "Settings" : "Configurações";
+// btnLanguage.textContent = language == "en" ? "EN" : "PT-BR";
+textLanguage.textContent = language == "en" ? "EN" : "PT-BR";
+languageIcon.style.backgroundImage = language == "en" ? svg.language.en : svg.language.pt;
 btnLanguage.title = language == "en" ? "Mudar para português" : "Change to english";
 /* Navbar */
 
 /* container-home */
-btnDownload.textContent = language == "en" ? "Download" : "Baixar";
-downloadHistory.textContent = language == "en" ? "Download history" : "Histórico de download";
+inputVideo.placeholder = language == "en" ? "Paste video link here" : "Cole o link do vídeo aqui";
+formats.title = language == "en" ? "Select a format" : "Selecione um formato";
+btnDownload.title = language == "en" ? "Download" : "Baixar";
 /* container-home */
 
 /* container-about */
@@ -42,10 +46,14 @@ textCopy.textContent =
     "Repositório do projeto disponível em";
 /* container-about */
 
-/* container-path */
+/* container-config */
 downloadPath.textContent = language == "en" ? "Destination folder" : "Pasta de destino";
-btnSelect.textContent = language == "en" ? "Select folder" : "Selecionar pasta";
-/* container-path */
+textButton.textContent = language == "en" ? "Select folder" : "Selecionar pasta";
+
+titleTheme.textContent = language == "en" ? "Change theme" : "Mudar tema";
+labelRadioStatic.textContent = language == "en" ? "Static" : "Estático";
+labelRadioAnimated.textContent = language == "en" ? "Animated" : "Animado";
+/* container-config */
 
 /* container-playlist */
 inputPlaylist.placeholder = language == "en" ? "Paste playlist link here" : "Cole o link da playlist aqui";
