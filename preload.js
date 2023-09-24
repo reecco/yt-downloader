@@ -85,10 +85,7 @@ contextBridge.exposeInMainWorld("media", {
         const chooseFormat =
           format == "mp4" || format == "webm" ? "videoandaudio" : "audioonly";
 
-        const chooseQuality =
-          format == "mp4" || format == "web" ? "highestvideo" : "highestaudio";
-
-        const stream = ytdl(url, { filter: chooseFormat, quality: "highestvideo", format: { quality: "hd1080" } });
+        const stream = ytdl(url, { filter: chooseFormat, quality: "highest" });
 
         stream.pipe(fs.createWriteStream(path));
 
